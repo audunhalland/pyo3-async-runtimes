@@ -26,6 +26,7 @@ attributes = ["pyo3-async-runtimes-macros"]
 testing = ["clap", "inventory"]
 tokio-runtime = ["tokio"]
 unstable-streams = ["async-channel"]
+multi-thread = ["tokio/rt-multi-thread"]
 default = []
 
 [package.metadata.docs.rs]
@@ -133,5 +134,5 @@ optional = true
 
 [dependencies.tokio]
 version = "1.13"
-features = ["rt", "rt-multi-thread", "time"]
+features = ["rt", "time"]
 optional = true

@@ -65,7 +65,7 @@ impl Deref for Pyo3Runtime {
     }
 }
 
-static TOKIO_BUILDER: Lazy<Mutex<Builder>> = Lazy::new(|| Mutex::new(multi_thread()));
+static TOKIO_BUILDER: Lazy<Mutex<Builder>> = Lazy::new(|| Mutex::new(runtime_builder()));
 static TOKIO_RUNTIME: OnceCell<Pyo3Runtime> = OnceCell::new();
 
 impl generic::JoinError for task::JoinError {
@@ -197,8 +197,11 @@ pub fn get_runtime<'a>() -> &'a Runtime {
     })
 }
 
-fn multi_thread() -> Builder {
+fn runtime_builder() -> Builder {
+    #[cfg(feature = "multi-thread")]
     let mut builder = Builder::new_multi_thread();
+    #[cfg(not(feature = "multi-thread"))]
+    let mut builder = Builder::new_current_thread();
     builder.enable_all();
     builder
 }
